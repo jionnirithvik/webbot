@@ -1,0 +1,1836 @@
+require('./settings');
+const fs = require('fs');
+const util = require('util');
+const jimp = require('jimp');
+const axios = require('axios');
+const chalk = require('chalk');
+const yts = require('yt-search');
+const ytdl = require('@vreden/youtube_scraper');
+const speed = require('performance-now');
+const moment = require('moment-timezone');
+const nou = require("node-os-utils");
+const cheerio = require('cheerio');
+const os = require('os');
+const pino = require('pino');
+const path = require('path');
+const gtts = require('gtts');
+const fetch = require('node-fetch');
+const crypto = require('crypto');
+const { exec, spawn, execSync } = require('child_process');
+
+const { default: WAConnection, jidDecode, useMultiFileAuthState, Browsers, DisconnectReason, makeInMemoryStore, makeCacheableSignalKeyStore, fetchLatestWaWebVersion, proto, PHONENUMBER_MCC, getAggregateVotesInPollMessage, downloadContentFromMessage, generateWAMessageFromContent, prepareWAMessageMedia} = require('@whiskeysockets/baileys');
+
+const { LoadDataBase } = require('./src/message');
+const { TelegraPh, UguuSe } = require('./lib/uploader');
+const { toAudio, toPTT, toVideo } = require('./lib/converter');
+const { imageToWebp, videoToWebp, writeExif } = require('./lib/exif');
+const { chatGpt, tiktokDl, facebookDl, instaDl, instaDownload, instaStory, ytMp4, ytMp3, allDl, Ytdl, cekKhodam } = require('./lib/screaper');
+const { pinterest, pinterest2, wallpaper, wikimedia, quotesAnime, happymod, umma, ringtone, styletext, ssweb, igstalk, tts, remini, mediafire } = require('./lib/scraper');
+const { unixTimestampSeconds, generateMessageTag, processTime, ucapan, webApi, getRandom, getBuffer, fetchJson, runtime, clockString, sleep, isUrl, getTime, formatDate, tanggal, formatp, jsonformat, reSize, toHD, logic, generateProfilePicture, bytesToSize, checkBandwidth, getSizeMedia, parseMention, getGroupAdmins, readFileTxt, readFileJson, getHashedPassword, generateAuthToken, cekMenfes, generateToken, batasiTeks, randomText, isEmoji, getTypeUrlMedia, pickRandom, toIDR} = require('./lib/function');
+const contacts = JSON.parse(fs.readFileSync("./database/contacts.json"))
+const listidch = JSON.parse(fs.readFileSync("./database/listidch.json"))
+const bljpm = JSON.parse(fs.readFileSync("./database/bljpm.json"))
+
+module.exports = async (zassbtz, m, chatUpdate, store) => {
+	try {
+await LoadDataBase(zassbtz, m)
+const botNumber = await zassbtz.decodeJid(zassbtz.user.id)
+const body = (m.type === 'conversation') ? m.message.conversation : (m.type == 'imageMessage') ? m.message.imageMessage.caption : (m.type == 'videoMessage') ? m.message.videoMessage.caption : (m.type == 'extendedTextMessage') ? m.message.extendedTextMessage.text : (m.type == 'buttonsResponseMessage') ? m.message.buttonsResponseMessage.selectedButtonId : (m.type == 'listResponseMessage') ? m.message.listResponseMessage.singleSelectReply.selectedRowId : (m.type == 'templateButtonReplyMessage') ? m.message.templateButtonReplyMessage.selectedId : (m.type === 'messageContextInfo') ? (m.message.buttonsResponseMessage?.selectedButtonId || m.message.listResponseMessage?.singleSelectReply.selectedRowId || m.text) : ''
+const budy = (typeof m.text == 'string' ? m.text : '')
+const prefix = "."
+const isCmd = body.startsWith(prefix)
+const time = moment.tz('Asia/Jakarta').format('HH:mm')
+const from = m.key.remoteJid
+const messagesD = body.slice(0).trim().split(/ +/).shift().toLowerCase()
+const args = body.trim().split(/ +/).slice(1)
+var crypto = require("crypto")
+let { randomBytes } = require("crypto")
+const makeid = randomBytes(3).toString('hex')
+const getQuoted = (m.quoted || m)
+const isCreator = isOwner = [botNumber, ...owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender);
+const sender = m.key.fromMe ? (zassbtz.user.id.split(':')[0]+'@s.whatsapp.net' || zassbtz.user.id) : (m.key.participant || m.key.remoteJid)
+const senderNumber = sender.split('@')[0]
+const pushname = m.pushName || `${senderNumber}`
+const groupMetadata = m.isGroup ? await zassbtz.groupMetadata(m.chat).catch(e => {}) : {}
+let participant_bot = m.isGroup ? groupMetadata?.participants.find((v) => v.id == botNumber) : {}
+let participant_sender = m.isGroup ? groupMetadata?.participants.find((v) => v.id == m.sender) : {}
+const quoted = (getQuoted.type == 'buttonsMessage') ? getQuoted[Object.keys(getQuoted)[1]] : (getQuoted.type == 'templateMessage') ? getQuoted.hydratedTemplate[Object.keys(getQuoted.hydratedTemplate)[1]] : (getQuoted.type == 'product') ? getQuoted[Object.keys(getQuoted)[0]] : m.quoted ? m.quoted : m
+const command = isCmd ? body.slice(prefix.length).trim().split(' ').shift().toLowerCase() : ""
+const text = q = args.join(' ')
+const mime = (quoted.msg || quoted).mimetype || ''
+const qmsg = (quoted.msg || quoted)
+const func = require('./database/utils.js')
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+const thumbs = global.thumb
+const randomThumbUrl = thumbs[Math.floor(Math.random() * thumbs.length)]
+const audioList = global.vn
+const audioUrl = audioList[Math.floor(Math.random() * audioList.length)]
+
+// Initialization
+let participants = []
+let isAdmins = false
+let isBotAdmins = false
+
+if (m.isGroup) {
+  const groupMetadata = await zassbtz.groupMetadata(m.chat)
+  participants = groupMetadata.participants || []
+  isAdmins = participants.some(p => p.id === m.sender && p.admin)
+  isBotAdmins = participants.some(p => p.id === botNumber && p.admin)
+}
+
+
+//——————————[ Message Logs ]——————————//
+
+if (!m.isBaileys) {
+  moment.locale('en'); 
+  const now = moment().tz('America/Chicago'); 
+
+  const tanggal = now.format('dddd, D MMMM YYYY');  
+  const jam = now.format('HH.mm.ss');               
+
+  const garisAtas = chalk.hex('#33FFCC')('═'.repeat(60));
+  const garisBawah = chalk.hex('#E0FFFF')('─'.repeat(60));
+  const label = m.isGroup
+    ? chalk.bgHex('#8A2BE2').hex('#FFFFFF').bold('💬 GROUP CHAT')
+    : chalk.bgHex('#20B2AA').hex('#FFFFFF').bold('💬 PRIVATE CHAT');
+
+  const msgType = Object.keys(m.message || {})[0];
+  let isiPesan = '';
+  let ikonType = '';
+
+  switch (msgType) {
+    case 'conversation':
+      isiPesan = m.message.conversation;
+      ikonType = '📝 Text';
+      break;
+    case 'extendedTextMessage':
+      isiPesan = m.message.extendedTextMessage.text;
+      ikonType = '📝 Text (Extended)';
+      break;
+    case 'imageMessage':
+      isiPesan = m.message.imageMessage?.caption || '[Image]';
+      ikonType = '🖼️ Image';
+      break;
+    case 'videoMessage':
+      isiPesan = m.message.videoMessage?.caption || '[Video]';
+      ikonType = '🎥 Video';
+      break;
+    case 'documentMessage':
+      const doc = m.message.documentMessage || {};
+      const fileName = doc.fileName || '[Document]';
+      const mimeType = doc.mimetype || '';
+      const fileSize = doc.fileLength || 0;
+      const fileSizeMB = (fileSize / (1024 * 1024)).toFixed(2) + ' MB';
+
+      isiPesan = `${fileName} (${fileSizeMB})`;
+
+      if (mimeType.includes('zip') || fileName.toLowerCase().endsWith('.zip') || fileName.toLowerCase().endsWith('.rar')) {
+        ikonType = '🗜️ Archive (ZIP/RAR)';
+      } else {
+        ikonType = '📄 Document';
+      }
+      break;
+    case 'audioMessage':
+      isiPesan = '[Audio]';
+      ikonType = '🎵 Audio';
+      break;
+    case 'stickerMessage':
+      isiPesan = '[Sticker]';
+      ikonType = '🔖 Sticker';
+      break;
+    default:
+      isiPesan = `[${msgType.toUpperCase()}]`;
+      ikonType = '❔ Unknown';
+  }
+
+  const putih = chalk.hex('#FFFFFF');
+  const terang = chalk.hex('#FFFF33');
+  const hijau = chalk.hex('#00FF00').bold;
+  const cyan = chalk.hex('#00FFFF');
+  const pink = chalk.hex('#FF66FF');
+  const abu = chalk.hex('#B0BEC5');
+
+  let pengirim = m.sender.split('@')[0];
+  let namaGroup = '';
+  if (m.isGroup) {
+    try {
+      const metadata = await zassbtz.groupMetadata(m.chat);
+      namaGroup = metadata.subject;
+    } catch (e) {
+      namaGroup = '[Unknown Group]';
+    }
+  }
+
+  console.log(`\n${garisAtas}`);
+  console.log(label);
+  console.log(`${putih('📅 Date      :')} ${putih(tanggal)}`);
+  console.log(`${putih('⏰ Time      :')} ${terang(jam)}`);
+  console.log(`${putih('👤 Sender    :')} ${cyan(pengirim)}${m.isGroup ? ` ${putih('di')} ${pink(namaGroup)}` : ''}`);
+  console.log(`${putih('💬 Type      :')} ${putih(ikonType)}`);
+  console.log(`${putih('💬 Chat Type :')} ${m.isGroup ? 'Group' : 'Private'}`);
+  if (isiPesan && !isiPesan.startsWith('[')) {
+    console.log(`${putih('📝 Message Content :')} ${hijau(isiPesan)}`);
+  } else {
+    console.log(`${putih('📝 Message Content :')} ${abu(isiPesan)}`);
+  }
+  console.log(garisBawah);
+}
+
+//——————————[ Bot Respons ]——————————//
+
+const reply = async (teks) => {
+  const now = new Date();
+const tanggal = now.toLocaleDateString('en-US', {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'America/Chicago'
+});
+const jam = now.toLocaleTimeString('en-US', {
+  timeZone: 'America/Chicago',
+  hour12: false
+});
+
+  const garisAtas = chalk.hex('#33FFCC')('═'.repeat(60));
+  const garisBawah = chalk.hex('#E0FFFF')('─'.repeat(60));
+  const putih = chalk.hex('#FFFFFF');
+  const hijau = chalk.hex('#00FF00').bold;
+  const terang = chalk.hex('#FFFF33');
+
+  const label = m.isGroup
+    ? chalk.bgHex('#8A2BE2').hex('#FFFFFF').bold('🤖 RESPONSE IN GROUP')
+    : chalk.bgHex('#20B2AA').hex('#FFFFFF').bold('🤖 RESPONSE IN PRIVATE');
+
+  console.log(`\n${garisAtas}`);
+  console.log(label);
+  console.log(`${putih('📅 Date      :')} ${putih(tanggal)}`);
+  console.log(`${putih('⏰ Time      :')} ${terang(jam)}`);
+  console.log(`${putih('📝 Message   :')} ${hijau(teks)}`);
+  console.log(`${putih('💬 Chat Type :')} ${m.isGroup ? 'Group' : 'Private'}`);
+  console.log(garisBawah);
+
+  return await zassbtz.sendMessage(m.chat, {
+    text: teks,
+    mentions: [],
+    contextInfo: {
+      isForwarded: true,
+      forwardingScore: 9999,
+      forwardedNewsletterMessageInfo: {
+        newsletterName: global.nameSaluran,
+        newsletterJid: global.idSaluran
+      }
+    }
+  }, { quoted: m });
+};
+
+//——————————[ Template quoted ]——————————//
+
+const qkuro = { key:{ remoteJid: 'status@broadcast', participant: '0@s.whatsapp.net' }, message:{ newsletterAdminInviteMessage: { newsletterJid: global.idSaluran, newsletterName: 'ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴ', caption: `${botname} Made By ${namaOwner}`, inviteExpiration: 0}}}
+
+const qtext = {
+  key: { 
+    remoteJid: "status@broadcast", 
+    participant: "0@s.whatsapp.net"
+  },
+  message: {
+    extendedTextMessage: {
+      text: global.botname
+    }
+  }
+};
+
+const qloc = {key: {participant: '0@s.whatsapp.net', ...(m.chat ? {remoteJid: `status@broadcast`} : {})}, message: {locationMessage: {name: `${global.botname} by ${namaOwner}`,jpegThumbnail: ""}}}
+
+const qlocJpm = {key: {participant: '0@s.whatsapp.net', ...(m.chat ? {remoteJid: `status@broadcast`} : {})}, message: {locationMessage: {name: `${global.botname} Made By ${namaOwner}`,jpegThumbnail: ""}}}
+
+const qtoko = {key: {fromMe: false, participant: `0@s.whatsapp.net`, ...(m.chat ? {remoteJid: "status@broadcast"} : {})}, message: {"productMessage": {"product": {"productImage": {"mimetype": "image/jpeg", "jpegThumbnail": ""}, "title": `Payment By ${namaOwner}`, "description": null, "currencyCode": "USD", "priceAmount1000": "999999999999999", "retailerId": `Powered By ${namaOwner}`, "productImageCount": 1}, "businessOwnerJid": `0@s.whatsapp.net`}}}
+
+const qlive = {key: {participant: '0@s.whatsapp.net', ...(m.chat ? {remoteJid: `status@broadcast`} : {})}, message: {liveLocationMessage: {caption: `${global.botname} made by ${namaOwner}`,jpegThumbnail: ""}}}
+
+var ppuser
+try {
+ppuser = await zassbtz.profilePictureUrl(m.sender, 'image')
+} catch (err) {
+ppuser = 'https://telegra.ph/file/a059a6a734ed202c879d3.jpg'
+}
+
+//——————————[ Event Control ]——————————//
+
+if (m.isGroup && db.groups[m.chat] && db.groups[m.chat].mute == true && !isCreator) return
+
+if (m.isGroup && db.groups[m.chat] && db.groups[m.chat].simi == true && !isCmd) {
+try {
+let res = await axios.get(`https://simsimi.site/api/v2/?mode=talk&lang=id&message=${m.text}&filter=true`)
+if (res.data.success) {
+await reply(res.data.success)
+}
+} catch (e) {}
+}
+
+//——————————[ Function ]——————————//
+
+function isQuotedImage(message) {
+    return message.quoted && message.quoted.type === 'image';
+}
+
+function isUserAllowedInServer(user, serverIndex) {
+  return settingpanel[serverIndex].users.some(u => u.includes(user));
+}
+
+const createSerial = (size) => {
+return crypto.randomBytes(size).toString('hex').slice(0, size)
+}
+
+function capital(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function generateRandomNumber(min, max) {
+return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+async function example(teks) {
+  const textContoh = `\`\`\`</> Usage Examples:\`\`\`\nType *${prefix + command}* ${teks}`;
+  const nedd = {
+    text: textContoh,
+    contextInfo: {
+      mentionedJid: [m.sender],
+      forwardingScore: 9999999,
+      isForwarded: true,
+      externalAdReply: {
+        title: `- ${botname} -`,
+        body: `Version ${versi}`,
+        previewType: "PHOTO",
+        thumbnailUrl: global.img,
+        sourceUrl: web,
+        showAdAttribution: true,
+        containsAutoReply: true
+      }
+    }
+  };
+  return zassbtz.sendMessage(m.chat, nedd, {
+    quoted: qkuro
+  });
+}
+
+async function showPrivateLoading(zassbtz, m) {
+  if (m.isGroup) return; 
+
+  const icons = ['🕳️', '🖤', '🤎', '💜', '🕳️'];
+  for (let icon of icons) {
+    await zassbtz.sendMessage(m.chat, { react: { text: icon, key: m.key } }).catch(() => {});
+    await new Promise(res => setTimeout(res, 500));
+  }
+
+  await zassbtz.sendMessage(m.chat, { react: { text: '', key: m.key } }).catch(() => {});
+}
+
+//——————————[ AutoDownload ]——————————//
+
+if (autodownload && m.text && typeof m.text === 'string') {
+  if (/^(https?:\/\/)?(www\.)?(vm\.tiktok\.com|tiktok\.com|instagram\.com|facebook\.com|fb\.watch)/i.test(m.text)) {
+    try {
+      // React emoji 📥 ke pesan yang mengandung link
+      await zassbtz.sendMessage(m.chat, {
+        react: {
+          text: "⌛",
+          key: m.key
+        }
+      });
+
+      const res = await func.fetchJson(`https://api.neoxr.eu/api/aio?url=${encodeURIComponent(m.text)}&apikey=${global.neoxr}`);
+
+      if (!res || !res.status || !res.data || !res.data.medias || !res.data.medias.length)
+        return reply("❌ Couldn't fetch media from the provided URL.");
+
+      // Hanya ambil video (mp4), bukan audio
+      const filtered = res.data.medias.filter(media => media.extension === 'mp4');
+
+      if (!filtered.length) return reply("❌ Only audio found, no video to download.");
+
+      for (let media of filtered) {
+        const quality = media.quality || "unknown";
+        const caption = `✅ ${res.data.source || 'Media'} (${quality.toUpperCase()})`;
+        await zassbtz.sendFileUrl(m.chat, media.url, caption, m);
+      }
+
+    } catch (err) {
+      console.error(err);
+      return reply("⚠️ Error occurred while downloading media.");
+    }
+  }
+}
+
+//——————————[ AutoLink ]——————————//
+
+if (antilink && m.text && typeof m.text === "string") {
+  const urlPattern = /(https?:\/\/[^\s]+)/gi;
+
+  if (urlPattern.test(m.text)) {
+    try {
+      await zassbtz.sendMessage(m.chat, { delete: m.key });
+    } catch (e) {
+      console.error("❌ Failed to delete message:", e);
+    }
+  }
+}
+
+//——————————[ Case Command ]——————————//
+
+switch (command) {
+case "menu":
+case "kuroko": {
+  await zassbtz.sendMessage(m.chat, {
+    react: { text: "💀", key: m.key }
+  });
+
+  const uptime = runtime(process.uptime());
+  const vpsUptime = runtime(os.uptime());
+  const tanggalSekarang = tanggal(Date.now());
+  const thumbUrl = randomThumbUrl;
+
+  let thumb;
+  try {
+    const res = await fetch(thumbUrl);
+    thumb = await res.buffer();
+  } catch (e) {
+    return m.reply("Gagal mengambil thumbnail.");
+  }
+
+  const teks = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Hello, ${pushname} 👋
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 Creator  : ${global.namaOwner}
+📌 Number   : ${ownerUtama}
+📌 Bot Name : ${botname}
+📌 Mode     : ${zassbtz.public ? 'Public' : 'Self'}
+📌 Runtime  : ${runtime(process.uptime())}
+📌 VPS Time : ${runtime(os.uptime())}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━`.trim();
+
+  const listButton = {
+    title: "📚 Menu Category",
+    sections: [
+      {
+        title: "Popular Features",
+        rows: [
+          {
+            header: "Download",
+            title: "Download Media",
+            description: "Download from TikTok, Instagram, etc.",
+            id: ".download"
+          },
+          {
+            header: "Brat",
+            title: "Brat Stickers",
+            description: "Make a brat sticker",
+            id: ".brat"
+          },
+          {
+            header: "Sticker",
+            title: "Image to Sticker",
+            description: "Reply to image with .s",
+            id: ".s"
+          },
+          {
+            header: "Read ViewOnce",
+            title: "View ViewOnce",
+            description: "Reply to ViewOnce messages with .rvo",
+            id: ".rvo"
+          },
+          {
+            header: "AI Chat",
+            title: "Ask AI",
+            description: "Use .ai <message>",
+            id: ".ai"
+          },
+          {
+            header: "All Menus",
+            title: "View All Commands",
+            description: "Full list of bot features",
+            id: ".allmenu"
+          }
+        ]
+      }
+    ]
+  };
+
+  const buttonParam = {
+    display_text: "Customer Support",
+    url: `https://wa.me/${ownerUtama}`,
+    merchant_url: `https://wa.me/${ownerUtama}`
+  };
+
+  const msg = generateWAMessageFromContent(m.chat, {
+    viewOnceMessage: {
+      message: {
+        messageContextInfo: {
+          deviceListMetadata: {},
+          deviceListMetadataVersion: 2
+        },
+        interactiveMessage: proto.Message.InteractiveMessage.create({
+          body: proto.Message.InteractiveMessage.Body.create({
+            text: teks
+          }),
+          footer: proto.Message.InteractiveMessage.Footer.create({
+            text: `Version: ${versi}`
+          }),
+          header: proto.Message.InteractiveMessage.Header.create({
+            title: `${botname} • Main Menu`,
+            subtitle: tanggalSekarang,
+            hasMediaAttachment: true,
+            ...(await prepareWAMessageMedia({
+              image: thumb,
+              mimetype: 'image/jpeg'
+            }, { upload: zassbtz.waUploadToServer }))
+          }),
+          nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+            buttons: [
+              {
+                name: "single_select",
+                buttonParamsJson: JSON.stringify(listButton)
+              },
+              {
+                name: "cta_reminder",
+                buttonParamsJson: JSON.stringify({
+                  display_text: "Activate Reminder",
+                  id: "reminder_start"
+                })
+              },
+              {
+                name: "cta_url",
+                buttonParamsJson: JSON.stringify(buttonParam)
+              }
+            ]
+          })
+        })
+      }
+    }
+  }, { userJid: m.chat, quoted: m });
+
+  await zassbtz.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+}
+break;
+
+//————————————————————//
+
+case "allmenu": {
+await showPrivateLoading(zassbtz, m);
+let timestamp = speed();
+let latensi = speed() - timestamp;
+let desc = tanggal(Date.now())
+const text13 = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Hello, ${pushname} 👋
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 Creator  : ${global.namaOwner}
+📌 Number   : ${ownerUtama}
+📌 Bot Name : ${botname}
+📌 Mode     : ${zassbtz.public ? 'Public' : 'Self'}
+📌 Runtime  : ${runtime(process.uptime())}
+📌 VPS Time : ${runtime(os.uptime())}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏͏
+┏━━ 👥 GROUP MENU ━━━━━━━━━━━┓
+┃ ⭐ .delete
+┃ ⭐ .joingc
+┃ ⭐ .leavegc
+┃ ⭐ .kickall
+┃ ⭐ .tagall
+┃ ⭐ .hidetag
+┃ ⭐ .kick   
+┃ ⭐ .leavegc2
+┃ ⭐ .welcome
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━ 📢 CHANNEL MENU ━━━━━━━━━┓
+┃ ⭐ .addidch
+┃ ⭐ .cekidch
+┃ ⭐ .delidch
+┃ ⭐ .listidch
+┃ ⭐ .upch
+┃ ⭐ .reactch
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━ 🎨 STICKER MENU ━━━━━━━━━┓
+┃ ⭐ .brat
+┃ ⭐ .sticker
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━ 🛠️ TOOLS MENU ━━━━━━━━━━━┓
+┃ ⭐ .tohd
+┃ ⭐ .tovn
+┃ ⭐ .tourl
+┃ ⭐ .tts
+┃ ⭐ .rvo
+┃ ⭐ .vo
+┃ ⭐ .getpp
+┃ ⭐ .toimg
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━ ⚙️ CONTROL MENU ━━━━━━━━━┓
+┃ ⭐ .setppbot
+┃ ⭐ .setnamabot
+┃ ⭐ .setbiobot
+┃ ⭐ .setting
+┃ ⭐ .autorecording 
+┃ ⭐ .autoread
+┃ ⭐ .autoreadsw
+┃ ⭐ .anticall
+┃ ⭐ .antilink
+┃ ⭐ .autodl
+┃ ⭐ .restart
+┃ ⭐ .owner
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+┏━━ 📥 DOWNLOADER MENU ━━━━━━┓
+┃ ⭐ .tiktok
+┃ ⭐ .instagram
+┃ ⭐ .xnxx
+┃ ⭐ .fb
+┃ ⭐ .download
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+╔═══════════════════════════╗
+║  © 2025 ${global.botname}  ║
+╚═══════════════════════════╝
+`;
+  await zassbtz.sendMessage(m.chat, {
+    text: text13,
+    mentions: [m.sender, global.owner + "@s.whatsapp.net"],
+    contextInfo: {
+      forwardingScore: 999999,
+      isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+                newsletterJid: global.idSaluran, 
+                serverMessageId: 103,
+                newsletterName: global.nameSaluran 
+            },
+      mentionedJid: [m.sender, global.owner + "@s.whatsapp.net"],
+      externalAdReply: {
+        title: `${botname} Version ${versi}`,
+        body: desc,
+        thumbnailUrl: randomThumbUrl,
+        mediaType: 1,
+        renderLargerThumbnail: true,
+        showAdAttribution: false
+      }
+    }
+  }, { quoted: qkuro })
+
+  await zassbtz.sendMessage(m.chat, {
+    audio: { url: audioUrl },
+    mimetype: 'audio/mp4',
+    ptt: true
+  }, { quoted: qkuro })
+}
+break;
+
+//————————————————————//
+
+case "setppbot":
+case "setpp": {
+  if (!isOwner) return reply("❌ This command is for the *owner only*.");
+
+  const bot = zassbtz.user.id;
+  const q = m.quoted ? m.quoted : m;
+  const mime = (q.msg || q).mimetype || "";
+
+  if (!mime || !/image/.test(mime)) {
+    return reply("🖼️ Please reply to an *image* to set as bot profile picture.");
+  }
+
+  try {
+    const img = await q.download();
+    if (!img) return reply("⚠️ Failed to download image.");
+    await zassbtz.updateProfilePicture(bot, img);
+    reply("✅ Bot profile picture has been updated successfully!");
+  } catch (e) {
+    console.error(e);
+    reply("❌ An error occurred while updating the profile picture.");
+  }
+}
+break;
+
+//————————————————————//
+
+case 'listgc':
+case 'listgrup': {
+  if (!isCreator) return reply(mess.owner);
+  
+  await zassbtz.sendMessage(m.chat, { react: { text: '🕖', key: m.key } });
+
+  let gcall;
+  try {
+    gcall = Object.values(await zassbtz.groupFetchAllParticipating());
+  } catch (e) {
+    return m.reply("*✖️ Failed to fetch group list.*");
+  }
+
+  let teks = `*📦 Related Groups List (${gcall.length} Group):*\n\n`;
+  gcall.forEach((group, index) => {
+    teks += `*${index + 1}. ${group.subject}*\n`;
+    teks += `├ ID: ${group.id}\n`;
+    teks += `├ Member: ${group.participants.length}\n`;
+    teks += `├ Status: ${group.announce ? "🔒 Close" : "🔓 Open"}\n`;
+    teks += `└ Creator: ${group.owner ? "@" + group.owner.split('@')[0] : '✖️ Unknown'}\n\n`;
+  });
+
+  zassbtz.sendMessage(m.chat, {
+    text: teks,
+    contextInfo: {
+      mentionedJid: [m.sender],
+      externalAdReply: {
+        title: `📁 ${gcall.length} Active Groups`,
+        body: `🧩 List Group`,
+        sourceUrl: global.web,
+        thumbnail: await getBuffer(randomThumbUrl),
+        mediaType: 1,
+        renderLargerThumbnail: true
+      }
+    }
+  }, { quoted: qkuro });
+}
+break;
+
+//————————————————————//
+
+case 'cekidgc': case 'getidgrup': {
+if (!isCreator) return reply(mess.owner)
+if (!q) return example(`provide the group link.`)
+let linkRegex = args.join(" ")
+let coded = linkRegex.split("https://chat.whatsapp.com/")[1]
+if (!coded) return m.reply("Invalid Link")
+zassbtz.query({
+tag: "iq",
+attrs: {
+type: "get",
+xmlns: "w:g2",
+to: "@g.us"
+},
+content: [{ tag: "invite", attrs: { code: coded } }]
+}).then(async(res) => { 
+let tekse = `${res.content[0].attrs.id ? res.content[0].attrs.id : "undefined"}`
+m.reply(tekse)
+})}
+break;
+
+
+//————————————————————//
+
+case "del":
+case "delete": {
+  if (!isCreator) return reply(mess.owner);
+  if (!m.quoted) return m.reply("Reply to the message you want to delete");
+
+  const isGroup = m.isGroup;
+  const botNumberJid = zassbtz.user.id.split(':')[0] + '@s.whatsapp.net';
+
+  const groupMetadata = isGroup ? await zassbtz.groupMetadata(m.chat) : {};
+  const groupAdmins = isGroup ? groupMetadata.participants.filter(p => p.admin !== null).map(p => p.id) : [];
+
+  const isBotAdmin = isGroup ? groupAdmins.includes(botNumberJid) : false;
+  const senderIsBot = m.quoted.sender === botNumberJid;
+  const fromMe = senderIsBot;
+
+  if (isGroup && !isBotAdmin) {
+    return m.reply("Bot must be admin to delete messages in group!");
+  }
+
+  zassbtz.sendMessage(m.chat, {
+    delete: {
+      remoteJid: m.chat,
+      fromMe,
+      id: m.quoted.id,
+      participant: m.quoted.sender
+    }
+  });
+}
+break;
+
+//————————————————————//
+
+case "joingc": case "join": {
+if (!isCreator) return reply(mess.owner)
+if (!text && !m.quoted) return example('provide the invite link.')
+let teks = m.quoted ? m.quoted.text : text
+if (!teks.includes('whatsapp.com')) return m.reply("Invalid Link!")
+let result = teks.split('https://chat.whatsapp.com/')[1]
+await zassbtz.groupAcceptInvite(result).then(respon => m.reply("Successfully Joined The Group ✅")).catch(error => m.reply(error.toString()))
+}
+break;
+
+//————————————————————//
+
+case "leave": case "leavegc": {
+if (!isCreator) return reply(mess.owner)
+if (!isGroup) return m.reply(msg.group)
+await m.reply("Leaving..")
+await sleep(3000)
+await zassbtz.groupLeave(m.chat)
+}
+break;
+
+//————————————————————//
+
+case "leavegc2": case "leave2": {
+if (!isCreator) return reply(mess.owner)
+let gcall = await Object.values(await zassbtz.groupFetchAllParticipating().catch(_=> null))
+let num = []
+let listgc = `*Example of How to Use:*\nType *${cmd}* Group number\n\n`
+await gcall.forEach((u, i) => {
+num.push(i)
+listgc += `*${i+1}.* ${u.subject}\n* *ID :* ${u.id}\n* *Members :* ${u.participants.length} Member\n* *Group status :* ${u.announce == true ? "Close" : "Open"}\n* *Creator :* ${u.owner ? u.owner.split('@')[0] : 'Already out'}\n\n`
+})
+if (!args[0]) {
+zassbtz.sendMessage(m.chat, {text: `${listgc}`, contextInfo: {mentionedJid: [m.sender], externalAdReply: {
+thumbnail: await getBuffer(ppuser), title: `[ ${gcall.length} Group Chat ] `, body: `Runtime : ${runtime(process.uptime())}`,  sourceUrl: global.linkyt, previewType: "PHOTO"}}}, {quoted: qchanel})
+} else if (args[0]) {
+if (!num.includes(Number(args[0]) - 1)) return m.reply("Group not found")
+let leav = Number(args[0]) - 1
+await m.reply(`Successfully Exited Group :\n*${gcall[leav].subject}*`)
+await zassbtz.groupLeave(`${gcall[leav].id}`)
+}}
+break;
+
+//————————————————————//
+
+case "tiktok":
+case "tt": {
+  if (!text) return reply(example("provide the link."));
+  await showPrivateLoading(zassbtz, m);
+  try {
+    let res = await func.fetchJson(`https://api.neoxr.eu/api/aio?url=${encodeURIComponent(text)}&apikey=${global.neoxr}`);
+
+    if (!res || !res.status || !res.data || res.data.source !== "Tiktok") {
+      return reply("Error! Result Not Found");
+    }
+
+    let video = res.data.medias.find(x => x.quality === "no_watermark" && x.extension === "mp4");
+    let audio = res.data.medias.find(x => x.quality === "audio" && x.extension === "mp3");
+
+    if (video) {
+      await zassbtz.sendMessage(m.chat, {
+        video: { url: video.url },
+        caption: "Tiktok Download Done ✅",
+        mimetype: "video/mp4"
+      }, { quoted: m });
+    }
+
+    if (audio) {
+      await zassbtz.sendMessage(m.chat, {
+        audio: { url: audio.url },
+        mimetype: "audio/mpeg"
+      }, { quoted: m });
+    }
+
+    if (!video && !audio) {
+      return reply("Media not found in the response.");
+    }
+
+  } catch (e) {
+    console.error(e);
+    return reply("Failed to download from Tiktok.");
+  }
+}
+break;
+
+//————————————————————//
+
+case "instagram": case "ig": {
+  if (!text) return reply(example("provide the link."))
+  reply("📥 Downloading instagram media . . .")
+  try {
+    let res = await func.fetchJson(`https://api.neoxr.eu/api/ig?url=${encodeURIComponent(text)}&apikey=${global.neoxr}`);
+
+    if (!res || !res.status || !res.data || !res.data.length) {
+      return reply("Error! Result Not Found")
+    }
+
+    for (let media of res.data) {
+      await zassbtz.sendFileUrl(m.chat, media.url, "Instagram Download Done ✅", m)
+    }
+
+  } catch (e) {
+    console.error(e)
+    return reply("An error occurred while downloading.")
+  }
+}
+break;
+
+//————————————————————//
+
+case "facebook": case "fb": {
+  if (!text) return reply(example("Please provide the Facebook video URL."))
+  reply("📥 Processing your Facebook download...")
+
+  try {
+    let res = await func.fetchJson(`https://api.neoxr.eu/api/fb?url=${encodeURIComponent(text)}&apikey=${global.neoxr}`);
+
+    if (!res || !res.status || !res.data || !res.data.length) {
+      return reply("❌ Failed to fetch the video. Make sure the URL is correct and public.")
+    }
+
+    for (let media of res.data) {
+      await zassbtz.sendFileUrl(m.chat, media.url, `✅ Facebook Video (${media.quality})`, m)
+    }
+
+  } catch (e) {
+    console.error(e)
+    return reply("⚠️ An error occurred while downloading the Facebook video.")
+  }
+}
+break;
+
+//————————————————————//
+
+case "media":
+case "dl":
+case "download": {
+  if (!text) return reply(example("Please provide a media URL."));
+  reply("📥 Downloading media...");
+
+  try {
+    const res = await func.fetchJson(`https://api.neoxr.eu/api/aio?url=${encodeURIComponent(text)}&apikey=${global.neoxr}`);
+
+    if (!res || !res.status || !res.data || !res.data.medias || !res.data.medias.length) {
+      return reply("❌ Failed to fetch media. Please check the URL and try again.");
+    }
+
+    for (let media of res.data.medias) {
+      let fileType = media.extension || "file";
+      let quality = media.quality || "unknown";
+      let caption = `✅ ${res.data.source || 'Media'} (${quality.toUpperCase()})`;
+
+      await zassbtz.sendFileUrl(m.chat, media.url, caption, m);
+    }
+
+  } catch (e) {
+    console.error(e);
+    return reply("⚠️ An error occurred while downloading the media.");
+  }
+}
+break;
+
+//————————————————————//
+
+case "reactch":
+case "rch": {
+  if (!isCreator) return reply(mess.owner);
+  if (!text) return reply("Example:\n.reactch https://whatsapp.com/channel/xxx/123 ❤️ mamix\n.reactch https://whatsapp.com/channel/xxx/123 ❤️mamix|5");
+
+  const hurufGaya = {
+    a: '🅐', b: '🅑', c: '🅒', d: '🅓', e: '🅔', f: '🅕', g: '🅖',
+    h: '🅗', i: '🅘', j: '🅙', k: '🅚', l: '🅛', m: '🅜', n: '🅝',
+    o: '🅞', p: '🅟', q: '🅠', r: '🅡', s: '🅢', t: '🅣', u: '🅤',
+    v: '🅥', w: '🅦', x: '🅧', y: '🅨', z: '🅩',
+    '0': '⓿', '1': '➊', '2': '➋', '3': '➌', '4': '➍',
+    '5': '➎', '6': '➏', '7': '➐', '8': '➑', '9': '➒'
+  };
+
+  const [mainText, offsetStr] = text.split('|');
+  const args = mainText.trim().split(" ");
+  const link = args[0]?.trim();
+
+  const match = link.match(/https:\/\/whatsapp\.com\/channel\/([a-zA-Z0-9_-]+)\/(\d+)/);
+  if (!match) return reply("❌ Invalid link!\nExample: .reactch https://whatsapp.com/channel/xxx/123 ❤️mamix|3");
+
+  const channelId = match[1];
+  const rawMessageId = match[2];
+
+  const offset = parseInt(offsetStr?.trim()) || 1;
+  const teksTanpaLink = args.slice(1).join(' ');
+  if (!teksTanpaLink) return reply("Enter text/emoji to react.");
+
+  const emoji = teksTanpaLink.toLowerCase().split('').map(c => {
+    if (c === ' ') return '―';
+    return hurufGaya[c] || c;
+  }).join('');
+
+  try {
+    const metadata = await zassbtz.newsletterMetadata("invite", channelId);
+    let success = 0, failed = 0;
+
+    for (let i = 0; i < offset; i++) {
+      const msgId = (parseInt(rawMessageId) - i).toString();
+      try {
+        await zassbtz.newsletterReactMessage(metadata.id, msgId, emoji);
+        success++;
+      } catch (e) {
+        failed++;
+      }
+    }
+
+    reply(`✅ Successfully sent reaction *${emoji}* to ${success} message in channel *${metadata.name}*\n❌ Failed in ${failed} message`);
+  } catch (err) {
+    console.error(err);
+    reply("❌ Failed to process request!");
+  }
+}
+break;
+
+//————————————————————//
+
+case "s": case "sticker": case "stiker": {
+if (!/image|video/gi.test(mime)) return reply(example("send the media."))
+if (/video/gi.test(mime) && qmsg.seconds > 15) return reply("Maximum video duration is 15 seconds!")
+var image = await zassbtz.downloadAndSaveMediaMessage(qmsg)
+await zassbtz.sendAsSticker(m.chat, image, m, {packname: global.packname})
+await fs.unlinkSync(image)
+}
+break;
+
+//————————————————————//
+
+case 'brat': {
+const { createCanvas, registerFont } = require('canvas');
+const Jimp = require('jimp');
+async function BratGenerator(teks) {
+  let width = 512;
+  let height = 512;
+  let margin = 20;
+  let wordSpacing = 50; 
+  let canvas = createCanvas(width, height);
+  let ctx = canvas.getContext('2d');
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, width, height);
+  let fontSize = 280;
+  let lineHeightMultiplier = 1.3;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = 'black';
+registerFont('./lib/arialnarrow.ttf', { family: 'Narrow' });
+  let words = teks.split(' ');
+  let lines = [];
+  let rebuildLines = () => {
+    lines = [];
+    let currentLine = '';
+    for (let word of words) {
+      let testLine = currentLine ? `${currentLine} ${word}` : word;
+      let lineWidth =
+        ctx.measureText(testLine).width + (currentLine.split(' ').length - 1) * wordSpacing;
+      if (lineWidth < width - 2 * margin) {
+        currentLine = testLine;
+      } else {
+        lines.push(currentLine);
+        currentLine = word;
+      }
+    }
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+  };
+  ctx.font = `${fontSize}px Narrow`;
+  rebuildLines();
+  while (lines.length * fontSize * lineHeightMultiplier > height - 2 * margin) {
+    fontSize -= 2;
+    ctx.font = `${fontSize}px Narrow`;
+    rebuildLines();
+  }
+    let lineHeight = fontSize * lineHeightMultiplier;
+  let y = margin;
+  for (let line of lines) {
+    let wordsInLine = line.split(' ');
+    let x = margin;
+    for (let word of wordsInLine) {
+      ctx.fillText(word, x, y);
+      x += ctx.measureText(word).width + wordSpacing;
+    }
+    y += lineHeight;
+  }
+  let buffer = canvas.toBuffer('image/png');
+  let image = await Jimp.read(buffer);
+  image.blur(3);
+  let blurredBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+return zassbtz.sendAsSticker(m.chat, blurredBuffer, m, { packname: global.packname, author: global.author })
+}
+if (!text) return reply(`Enter text for the sticker.\n\nExample:\n.brat Text1 text2`);
+return BratGenerator(text)
+}
+break;
+
+//————————————————————//
+
+case "viewonce": case "vo": {
+ if (!m.quoted) return reply("Reply to the media message that you want to view once.")
+ let msg = m.quoted.message
+ let type = Object.keys(msg)[0]
+
+ if (msg[type].viewOnce) return reply("It's alreade a view once message!")
+
+ let media = await downloadContentFromMessage(msg[type], type == 'imageMessage' ? 'image' : 'video')
+ let buffer = Buffer.from([])
+ for await (const chunk of media) {
+ buffer = Buffer.concat([buffer, chunk])
+ }
+
+ if (/image/.test(type)) {
+ return zassbtz.sendMessage(m.chat, {
+ image: buffer,
+ caption: msg[type]?.caption || "",
+ viewOnce: true
+ }, { quoted: m })
+ } else if (/video/.test(type)) {
+ return zassbtz.sendMessage(m.chat, {
+ video: buffer,
+ caption: msg[type]?.caption || "",
+ viewOnce: true
+ }, { quoted: m })
+ } else {
+ return reply("You can only take photos/videos to be used as View Once.")
+ }
+}
+break;
+
+//————————————————————//
+
+case "rvo": case "readviewonce": {
+if (!m.quoted) return reply(example("Reply the message!"))
+let msg = m.quoted.message
+    let type = Object.keys(msg)[0]
+if (!msg[type].viewOnce) return reply("The message is not viewonce!")
+    let media = await downloadContentFromMessage(msg[type], type == 'imageMessage' ? 'image' : type == 'videoMessage' ? 'video' : 'audio')
+    let buffer = Buffer.from([])
+    for await (const chunk of media) {
+        buffer = Buffer.concat([buffer, chunk])
+    }
+    if (/video/.test(type)) {
+        return zassbtz.sendMessage(m.chat, {video: buffer, caption: msg[type].caption || ""}, {quoted: m})
+    } else if (/image/.test(type)) {
+        return zassbtz.sendMessage(m.chat, {image: buffer, caption: msg[type].caption || ""}, {quoted: m})
+    } else if (/audio/.test(type)) {
+        return zassbtz.sendMessage(m.chat, {audio: buffer, mimetype: "audio/mpeg", ptt: true}, {quoted: m})
+    } 
+}
+break;
+
+//————————————————————//
+
+case "tohd": case "hd": {
+if (!isCreator) return reply(mess.prem)
+await showPrivateLoading(zassbtz, m);
+if (!/image/.test(mime)) return reply(example("send/reply the image."))
+let foto = await zassbtz.downloadAndSaveMediaMessage(qmsg)
+let result = await remini(await fs.readFileSync(foto), "enhance")
+await zassbtz.sendMessage(m.chat, {image: result}, {quoted: m})
+await fs.unlinkSync(foto)
+}
+break;
+
+//————————————————————//
+
+case "tts": {
+if (!text) return reply(example("test test"))
+if (text.length >= 300) return reply("The number of characters must be under 300!")
+reply(mess.wait)
+let id = 'id_001'
+try {
+const { data } = await axios.post("https://tiktok-tts.weilnet.workers.dev/api/generation", {
+    "text": text,
+    "voice": id
+})
+zassbtz.sendMessage(m.chat, { audio: Buffer.from(data.data, "base64"), mimetype: "audio/mp4" }, {quoted: m})
+} catch (e) {
+return reply(e.toString())
+}
+}
+break;
+
+//————————————————————//
+
+case "tourl": {
+if (!/image|video/.test(mime)) return reply(example("Send or reply the image"))
+const FormData = require('form-data');
+const { fromBuffer } = require('file-type');
+async function getUrls (buffer) {
+  let { ext } = await fromBuffer(buffer);
+  let bodyForm = new FormData();
+  bodyForm.append("fileToUpload", buffer, "file." + ext);
+  bodyForm.append("reqtype", "fileupload");
+  let res = await fetch("https://catbox.moe/user/api.php", {
+    method: "POST",
+    body: bodyForm,
+  });
+  let data = await res.text();
+  return data;
+}
+let media = await zassbtz.downloadAndSaveMediaMessage(qmsg)
+let teks = await getUrls(fs.readFileSync(media))
+await zassbtz.sendMessage(m.chat, {text: teks}, {quoted: m})
+await fs.unlinkSync(media)
+}
+break;
+
+//————————————————————//
+
+case "toimg": {
+if (!/webp/.test(mime) && !/audio/.test(mime)) return reply(example('Reply the sticker.'))
+await showPrivateLoading(zassbtz, m);
+let media = await zassbtz.downloadAndSaveMediaMessage(qmsg)
+let ran = `${makeid}.png`
+exec(`ffmpeg -i ${media} ${ran}`, (err) => {
+fs.unlinkSync(media)
+if (err) return err
+let buffer = fs.readFileSync(ran)
+zassbtz.sendMessage(m.chat, {image: buffer}, {
+quoted: m})
+fs.unlinkSync(ran)
+})
+}
+break;
+
+//————————————————————//
+
+case "joingc": case "join": {
+if (!isCreator) return reply(mess.owner)
+if (!text) return reply(example("the group link"))
+if (!text.includes("chat.whatsapp.com")) return reply("Invalid Link!")
+let result = text.split('https://chat.whatsapp.com/')[1]
+let id = await zassbtz.groupAcceptInvite(result)
+reply(`Successfully joined the group ${id}`)
+}
+break;
+
+//————————————————————//
+
+case "addidch": case "addch": {
+if (!isCreator) return reply(mess.owner)
+if (!text) return reply(example("channel id"))
+if (!text.endsWith("@newsletter")) return reply("Invalid channel id")
+let input = text
+if (listidch.includes(input)) return reply(`Id ${input} Already registered!`)
+listidch.push(input)
+await fs.writeFileSync("./database/listidch.json", JSON.stringify(listidch, null, 2))
+reply(`Berhasil menambah id channel kedalam database ✅`)
+}
+break;
+
+//————————————————————//
+
+case "delidch": case "delch": {
+if (!isCreator) return reply(mess.owner)
+if (listidch.length < 1) return reply("No channel id in database")
+if (!text) return reply(example("channel id"))
+if (text.toLowerCase() == "all") {
+listidch.splice(0, listidch.length)
+await fs.writeFileSync("./database/listidch.json", JSON.stringify(listidch))
+return reply(`Successfully deleted all channel ids from database ✅`)
+}
+if (!text.endsWith("@newsletter")) return reply("Invalid channel id")
+let input = text
+if (!listidch.includes(input)) return reply(`Id ${input} not listed!`)
+const pos = listidch.indexOf(input)
+listidch.splice(pos, 1)
+await fs.writeFileSync("./database/listidch.json", JSON.stringify(listidch, null, 2))
+reply(`Successfully deleted channel id from database ✅`)
+}
+break;
+
+//————————————————————//
+
+case "listidch": case "listch": {
+if (listidch.length < 1) return reply("No channel id in database")
+let teks = ` *── List all id channel*\n`
+for (let i of listidch) {
+teks += `\n* ${i}\n`
+}
+zassbtz.sendMessage(m.chat, {text: teks, mentions: reseller}, {quoted: m})
+}
+break;
+
+//————————————————————//
+
+case "cekidch": case "idch": {
+if (!text) return reply(example("channel id"))
+if (!text.includes("https://whatsapp.com/channel/")) return reply("Invalid Link!")
+let result = text.split('https://whatsapp.com/channel/')[1]
+let res = await zassbtz.newsletterMetadata("invite", result)
+let teks = `
+* *ID :* ${res.id}
+* *Name :* ${res.name}
+* *Total Followers :* ${res.subscribers}
+* *Status :* ${res.state}
+* *Verified :* ${res.verification == "VERIFIED" ? "Verified" : "NO"}
+`
+return reply(teks)
+}
+break;
+
+//————————————————————//
+
+case 'getpp':{
+  if (!isCreator) {
+    return reply(`✨ Elegant Way of Use ✨
+
+To take someone's profile picture:
+1. Reply to the message of the person you want to take a picture of
+2. Type ${prefix}getpp
+
+Example:
+> *User A sends a message*
+> *You reply to User A's message with:* ${prefix}getpp`)
+  }
+  
+  try {
+    pporg = await zassbtz.profilePictureUrl(m.quoted.sender, 'image')
+  } catch {
+    pporg = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+  }
+  zassbtz.sendMessage(m.chat, { image : { url : pporg }, caption:`${pushname} Profile Picture` }, {quoted : m})
+}
+break;
+
+//————————————————————// 
+
+case 'owner': {
+  const kontakUtama = {
+    displayName: `Owner ${botname}`,
+    vcard: `BEGIN:VCARD
+VERSION:3.0
+N:;;;; 
+FN:${global.namaOwner}
+item1.TEL;waid=6283138601646:6283138601646
+item1.X-ABLabel:Developer
+item2.TEL;waid=${global.ownerUtama}:${global.ownerUtama}
+item2.X-ABLabel:My Owner
+EMAIL;type=INTERNET:${email}
+ORG:Owner ${botname}
+END:VCARD`
+  }
+  await zassbtz.sendMessage(from, {
+    contacts: { contacts: [kontakUtama] },
+    contextInfo: {
+      forwardingScore: 999,
+      isForwarded: false,
+      mentionedJid: [sender],
+      externalAdReply: {
+        showAdAttribution: true,
+        renderLargerThumbnail: true,
+        title: `${botname} - Core`,
+        containsAutoReply: true,
+        mediaType: 1,
+        jpegThumbnail: await getBuffer(global.img),
+        mediaUrl: ` `,
+        sourceUrl: ` `
+      }
+    }
+  }, { quoted: qloc })
+}
+break;
+
+//————————————————————//
+
+case "self": {
+if (!isCreator) return
+zassbtz.public = false
+reply("Successfully Switched To Self Mode")
+}
+break;
+
+//————————————————————//
+
+case "public": {
+if (!isCreator) return
+zassbtz.public = true
+reply("Successfully Switched To Public Mode")
+}
+break;
+
+//————————————————————//
+
+case "upchannel": case "upch": {
+if (!isCreator) return reply(mess.owner)
+if (!text) return reply(example("teks"))
+await zassbtz.sendMessage(idSaluran, {text: text})
+reply("Successfully sent a *text* message to the whatsapp channel")
+}
+break;
+
+//————————————————————//
+
+case "xnxx": case "xnxxdl": {
+if (!q) return reply(example("link"))
+let data = await func.fetchJson(`https://newapibot.rikishopreal.my.id/download/xnxx?apikey=newapi2025&url=${q}`)
+if (!data.result) return reply("Result not found!")
+await zassbtz.sendMessage(m.chat, {video: {url: data.result.files.high || data.result.files.low}, caption: "XNXX Download Done ✅", mimetype: "video/mp4"}, {quoted: m})
+}
+break;
+
+//————————————————————//
+
+case "autoread": {
+if (!isCreator) return reply(mess.owner)
+if (!text) return example("on/off\nType *.statusbot* to see the bot setting status")
+if (text.toLowerCase() == "on") {
+if (autoread) return m.reply("*Autoread* is now active!\nType *.statusbot* to see the bot setting status")
+autoread = true
+m.reply("*Successfully Turned On Autoread ✅*\nType *.statusbot* To See Bot Setting Status")
+} else if (text.toLowerCase() == "off") {
+if (!autoread) return m.reply("*Autoread* is no longer active!\nType *.statusbot* to see the bot setting status")
+autoread = false
+m.reply("*Successfully Turned Off Autoread ✅*\nType *.statusbot* To See Bot Setting Status")
+} else {
+return m.reply(example("on/off\n\nType *.statusbot* to see the bot settings status"))
+}}
+break;
+
+//————————————————————//
+
+case "autoreadsw": {
+if (!isCreator) return reply(mess.owner)
+if (!text) return example("on/off\nType *.statusbot* to see the bot setting status")
+if (text.toLowerCase() == "on") {
+if (autoreadsw) return m.reply("*Autoreadsw* Is already active!\nType *.statusbot* to see the bot setting status")
+autoreadsw = true
+m.reply("*Successfully Turned On Autoreadsw ✅*\nType *.statusbot* To See Bot Setting Status")
+} else if (text.toLowerCase() == "off") {
+if (!autoreadsw) return m.reply("*Autoread* is no longer active!\nType *.statusbot* to see the bot setting status")
+autoreadsw = false
+m.reply("*Successfully Turned Off Autoreadsw ✅*\nType *.statusbot* To See Bot Setting Status")
+} else {
+return example("on/off\n\nType *.statusbot* to see the bot settings status")
+}}
+break;
+
+
+// ————————————————————————————————————————————— //
+
+case 'kickall': {
+  if (!m.isGroup) return m.reply('⚠️ This command is for groups only.')
+  if (!isAdmins) return m.reply('❌ You must be an admin to use this.')
+  if (!isBotAdmins) return m.reply('⚠️ The bot must be an admin first.')
+
+  // Exclude bot and sender from being kicked
+  const users = participants
+    .map(p => p.id)
+    .filter(id => id !== botNumber && id !== m.sender)
+
+  for (const user of users) {
+    await delay(1000)
+    await zassbtz.groupParticipantsUpdate(m.chat, [user], 'remove')
+  }
+
+  await m.reply('✅ Successfully kicked all group members (except you and me).')
+}
+break
+
+// ————————————————————————————————————————————— //
+
+case 'kick': {
+  if (!m.isGroup) return m.reply('⚠️ This command is for groups only.')
+  if (!isAdmins) return m.reply('❌ You must be an admin to use this.')
+  if (!isBotAdmins) return m.reply('⚠️ The bot must be an admin first.')
+  if (!m.mentionedJid[0]) return m.reply('⚠️ Please tag a user to kick.')
+
+  if (m.mentionedJid.includes(botNumber)) return m.reply("🙃 I can't kick myself.")
+  if (m.mentionedJid.includes(m.sender)) return m.reply("🫢 You can't kick yourself.")
+
+  try {
+    await zassbtz.groupParticipantsUpdate(m.chat, [m.mentionedJid[0]], 'remove')
+    await m.reply('✅ Successfully kicked the user!')
+  } catch (e) {
+    console.error(e)
+    await m.reply('❌ Failed to kick. Maybe the user is an admin or has already left.')
+  }
+}
+break
+
+// ————————————————————————————————————————————— //
+
+case 'hidetag': {
+  if (!m.isGroup) return m.reply('⚠️ This command is for groups only.')
+  if (!isAdmins) return m.reply('❌ You must be an admin to use this.')
+
+  const teks = (m.quoted ? m.quoted.text : (text || ''))
+  const mime = ((m.quoted || m.msg).mimetype)
+  const msgQuoted = m.quoted || m
+
+  const fkontak = {
+    key: {
+      participants: '0@s.whatsapp.net',
+      remoteJid: 'status@broadcast',
+      fromMe: false,
+      id: 'Hello'
+    },
+    message: {
+      contactMessage: {
+        vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Bot;;;\nFN:Bot\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Mobile\nEND:VCARD`
+      }
+    },
+    participant: '0@s.whatsapp.net'
+  }
+
+  try {
+    if (mime) {
+      const media = await msgQuoted.download()
+      await zassbtz.sendFile(m.chat, media, '', teks, fkontak, false, {
+        mentions: participants.map(p => p.id)
+      })
+    } else {
+      await zassbtz.sendMessage(m.chat, {
+        text: teks,
+        mentions: participants.map(p => p.id)
+      }, { quoted: fkontak })
+    }
+  } catch (e) {
+    console.error(e)
+    await m.reply('❌ Failed to send media message.')
+  }
+}
+break
+
+// ————————————————————————————————————————————— //
+
+case 'tagall': {
+  if (!m.isGroup) return m.reply('⚠️ This command is for groups only.')
+  if (!isAdmins && !isCreator) return m.reply('❌ You must be an admin to use this.')
+
+  const senderTag = `@${m.sender.split('@')[0]}`
+  const messageContent = text || '👋 Hello everyone!'
+  let tagText = `╔══ ✦ Tag All Members ✦ ══╗\n\n`
+  tagText += `🔸 *By:* ${senderTag}\n`
+  tagText += `📝 *Message:* ${messageContent}\n\n`
+
+  for (const member of participants) {
+    tagText += `➤ @${member.id.split('@')[0]}\n`
+  }
+
+  await zassbtz.sendMessage(m.chat, {
+    text: tagText,
+    mentions: participants.map(p => p.id)
+  }, { quoted: m })
+}
+break
+
+//————————————————————//
+
+case 'ai': {
+  if (!text) return reply('Please provide a question.\nExample: *.ai what is the capital of Japan?*')
+  reply('⏳ Please wait, processing...')
+
+  try {
+    let res = await func.fetchJson(`https://api.neoxr.eu/api/gpt4-mini?q=${encodeURIComponent(text)}&apikey=${global.neoxr}`)
+    
+    if (res.status && res.data?.message) {
+      await m.reply(res.data.message)
+    } else {
+      reply('❌ Failed to get AI response.')
+    }
+  } catch (e) {
+    console.error(e)
+    reply('❌ An error occurred while processing your request.')
+  }
+}
+break;
+
+//————————————————————//
+
+case "resetwarn": {
+  if (!isAdmin) return reply("❌ Only admins can reset warnings.");
+  const target = m.quoted?.sender || m.mentionedJid?.[0] || m.sender;
+  if (!target) return reply("Please mention or quote a user.");
+
+  global.db.data.users[target] = global.db.data.users[target] || { warn: 0 };
+  global.db.data.users[target].warn = 0;
+  reply(`✅ Warnings for @${target.split("@")[0]} have been reset.`, null, {
+    mentions: [target]
+  });
+}
+break;
+
+//————————————————————//
+
+case 'send': {
+  if (!m.quoted) return reply("❌ Please reply to a status containing image or video.");
+  
+  const owner = global.ownerUtama+"@s.whatsapp.net" || "13056978303@s.whatsapp.net"; 
+  const quoted = m.quoted;
+  const mime = (quoted.msg || {}).mimetype || '';
+
+  if (!/image|video/.test(mime)) return reply("❌ Replied status is not an image or video.");
+
+  try {
+    const media = await quoted.download();
+    const type = mime.includes('video') ? 'video' : 'image';
+
+    await zassbtz.sendMessage(owner, {
+      [type]: media,
+      mimetype: mime,
+      caption: `📥 Forwarded from status by: @${m.sender.split("@")[0]}`,
+    }, { mentions: [m.sender] });
+
+    reply("✅ Status media has been sent to the owner.");
+  } catch (e) {
+    console.error(e);
+    reply("⚠️ Failed to download or forward the status media.");
+  }
+}
+break;
+
+//————————————————————//
+
+case 'tovn': {
+  const quoted = m.quoted || m
+  const mime = quoted?.message?.videoMessage ? 'video' :
+               quoted?.message?.audioMessage ? 'audio' :
+               quoted?.mimetype || ''
+
+  if (!/video|audio/.test(mime)) return m.reply(`🎵 Please reply to a *video* or *voice note* you want to convert.`)
+
+  const media = await quoted.download()
+  if (!media) return m.reply('⚠️ Failed to download media.')
+
+  await zassbtz.sendMessage(m.chat, { react: { text: '🎧', key: m.key } })
+
+  try {
+    const { toAudio } = await import('./lib/converter.js')
+    const fileType = require('file-type')
+    const type = await fileType.fromBuffer(media)
+
+
+    if (!type?.ext) return m.reply('❌ Unable to detect file type.')
+
+    const audio = await toAudio(media, type.ext)
+
+    await zassbtz.sendMessage(m.chat, {
+      audio: audio,
+      mimetype: 'audio/mp4',
+      ptt: true
+    }, { quoted: m })
+
+  } catch (err) {
+    console.error('TOVN Error:', err)
+    m.reply('❌ Error while converting media.')
+  }
+
+  await zassbtz.sendMessage(m.chat, { react: { text: '', key: m.key } })
+}
+break;
+
+//————————————————————//
+
+case "anticall": {
+if (!isCreator) return reply(mess.owner)
+if (!text) return example("on/off\nType *.statusbot* to see the bot setting status")
+if (text.toLowerCase() == "on") {
+if (anticall) return m.reply("*Anticall* Is already Active!\nType *.statusbot* to View Bot Setting Status")
+anticall = true
+m.reply("*Successfully Turned On Anticall ✅*\nType *.statusbot* To See Bot Setting Status")
+} else if (text.toLowerCase() == "off") {
+if (!anticall) return m.reply("*Anticall* is no longer active!\nType *.statusbot* to see the bot setting status")
+anticall = false
+m.reply("*Successfully Turned Off Anticall ✅*\nType *.statusbot* To See Bot Setting Status")
+} else {
+return m.reply(example("on/off\nType *.statusbot* to see the bot setting status"))
+}}
+break;
+
+//————————————————————//
+
+case "autodl": {
+  if (!isCreator) return reply(mess.owner)
+  if (!text) return reply("Use: *.autodl on/off*\nCheck status: *.statusbot*")
+
+  if (text.toLowerCase() == "on") {
+    if (autodownload) return m.reply("*AutoDownload* is already enabled!\nCheck status with *.statusbot*")
+    autodownload = true
+    return m.reply("*AutoDownload Enabled ✅*\nBot will now auto download TikTok/Instagram/Facebook links.")
+  } else if (text.toLowerCase() == "off") {
+    if (!autodownload) return m.reply("*AutoDownload* is already disabled!\nCheck status with *.statusbot*")
+    autodownload = false
+    return m.reply("*AutoDownload Disabled ❌*")
+  } else {
+    return reply("Use: *.autodl on/off*\nCheck status: *.statusbot*")
+  }
+}
+break;
+
+//————————————————————//
+
+case "antilink": {
+  if (!isCreator) return reply(mess.owner)
+  if (!text) return reply("Use: *.antilink on/off*\nCheck status: *.statusbot*")
+
+  if (text.toLowerCase() === "on") {
+    if (antilink) return reply("*AntiLink* is already enabled!\nCheck with *.statusbot*")
+    antilink = true
+    return reply("*AntiLink Enabled ✅*\nBot will delete any message containing links.")
+  } else if (text.toLowerCase() === "off") {
+    if (!antilink) return reply("*AntiLink* is already disabled!\nCheck with *.statusbot*")
+    antilink = false
+    return reply("*AntiLink Disabled ❌*")
+  } else {
+    return reply("Use: *.antilink on/off*\nCheck status: *.statusbot*")
+  }
+}
+break;
+
+
+//————————————————————//
+
+case "welcome": {
+  if (!isCreator) return reply(mess.owner);
+  if (!text) return example("on/off\n\nType *.statusbot* to see the bot setting status.");
+
+  if (text.toLowerCase() === "on") {
+    if (global.welcome) return m.reply("*Welcome* Is already active!\n\nType *.statusbot* to see the bot setting status.");
+    global.welcome = true
+    m.reply("*Successfully turned on Welcome ✅*\n\nType *.statusbot* to see the bot setting status.");
+  } else if (text.toLowerCase() === "off") {
+    if (!global.welcome) return m.reply("*Welcome* is no longer active!\n\nType *.statusbot* to see the bot setting status.");
+    global.welcome = false
+    m.reply("*Successfully turned off Welcome ✅*\n\nType *.statusbot* to see the bot setting status.");
+  } else {
+    return m.reply(example("on/off\n\nType *.statusbot* to see the bot setting status."));
+  }
+}
+break;
+
+//————————————————————//
+
+case "setting": case "settingbot": case "option": case "statusbot": {
+if (!isCreator) return reply(mess.owner)
+var teks = `
+*List Status Setting Bot :*
+
+* Autoread : ${global.autoread ? "*Active*" : "*Not Active*"}
+* Autoreadsw : ${global.autoreadsw ? "*Active*" : "*Not Active*"}
+* Anticall : ${global.anticall ? "*Active*" : "*Not Active*"}
+* Antilink : ${global.antilink ? "*Active*" : "*Not Active*"}
+* Autodl : ${global.autodownload ? "*Active*" : "*Not Active*"}
+* Welcome : ${global.welcome ? "*Active*" : "*Not Active*"}
+
+*Example of Usage:*
+Type *.autoread* on/off`
+m.reply(teks)
+}
+break;
+
+//————————————————————//
+
+case "setnamabot": {
+if (!isCreator) return reply(mess.owner);
+if (!text) return example("teks")
+zassbtz.updateProfileName(text)
+m.reply("*Successfully Changed Bot Name ✅*")
+}
+break;
+
+//————————————————————//
+
+case "setbio": case "setbiobot": {
+if (!isCreator) return reply(mess.owner);
+if (!text) return example("teks")
+zassbtz.updateProfileStatus(text)
+m.reply("*Successfully Replaced Bio Bot ✅*")
+}
+break;
+
+//————————————————————//
+
+case 'pppanjang': case 'setppbot':{
+if (!isCreator) return reply(mess.owner)
+if (!quoted) return example(`Reply to the photo you want to make into a pp`)
+if (!/image/.test(mime)) return reply(`Reply image`)
+if (/webp/.test(mime)) return reply(`Reply image`)
+let media = await zassbtz.downloadAndSaveMediaMessage(quoted)
+var { img } = await generateProfilePicture(media)
+await zassbtz.query({
+tag: 'iq',
+attrs: {
+to: botNumber,
+type:'set',
+xmlns: 'w:profile:picture'
+},
+content: [
+{
+tag: 'picture',
+attrs: { type: 'image' },
+content: img
+} 
+]
+})
+m.reply("Done!")
+}
+break;
+
+//————————————————————//
+
+case "rst":
+case "restart": {
+  if (!isCreator) return reply(mess.owner);
+
+  await reply("Please wait a moment, the bot is restarting...");
+
+  try {
+    if (zassbtz?.ws?.close) {
+      await zassbtz.ws.close();
+    }
+    if (zassbtz?.ev?.removeAllListeners) {
+      zassbtz.ev.removeAllListeners();
+    }
+  } catch (err) {
+    console.error("Error while closing connection:", err);
+  }
+
+  // Restart
+  process.exit(0);
+
+  break;
+}
+
+//================ [ DEFAULT ] ================//
+default:
+if (budy.startsWith('>')) {
+if (!isCreator) return
+try {
+let evaled = await eval(budy.slice(2))
+if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
+await reply(evaled)
+} catch (err) {
+await reply(String(err))
+}}
+
+if (m.text.toLowerCase() == "bot") {
+reply("Bot Online ✅")
+}
+
+if (budy.startsWith('=>')) {
+if (!isCreator) return
+try {
+let evaled = await eval(`(async () => { ${budy.slice(2)} })()`)
+if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
+await reply(evaled)
+} catch (err) {
+await reply(String(err))
+}}
+
+if (budy.startsWith('$')) {
+if (!isCreator) return
+if (!text) return
+exec(budy.slice(2), (err, stdout) => {
+if (err) return reply(`${err}`)
+if (stdout) return reply(stdout)
+})
+}
+
+
+}} catch (err) {
+console.log(util.format(err));
+zassbtz.sendMessage(obj + "@s.whatsapp.net", {text: '*Error Feature Detected*\n\n*Error log :*\n' + util.format(err), contextInfo: { isForwarded: true }}, {quoted: m})
+}}
+
+
+let file = require.resolve(__filename)
+fs.watchFile(file, () => {
+	fs.unwatchFile(file)
+	console.log(chalk.redBright(`Update ${__filename}`))
+	delete require.cache[file]
+	require(file)
+});
